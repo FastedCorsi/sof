@@ -20,6 +20,8 @@ jobs:
         shell: pwsh
         run: |
           $candidates = @(
+            "${env:ProgramFiles}\Epic Games\UE_5.6\Engine\Build\BatchFiles\RunUAT.bat",
+            "${env:ProgramFiles}\Epic Games\UE_5.5\Engine\Build\BatchFiles\RunUAT.bat",
             "${env:ProgramFiles}\Epic Games\UE_5.4\Engine\Build\BatchFiles\RunUAT.bat",
             "${env:ProgramFiles}\Epic Games\UE_5.3\Engine\Build\BatchFiles\RunUAT.bat"
           )
@@ -61,6 +63,8 @@ jobs:
         shell: pwsh
         run: |
           $candidates = @(
+            "${env:ProgramFiles}\Epic Games\UE_5.6\Engine\Build\BatchFiles\RunUAT.bat",
+            "${env:ProgramFiles}\Epic Games\UE_5.5\Engine\Build\BatchFiles\RunUAT.bat",
             "${env:ProgramFiles}\Epic Games\UE_5.4\Engine\Build\BatchFiles\RunUAT.bat",
             "${env:ProgramFiles}\Epic Games\UE_5.3\Engine\Build\BatchFiles\RunUAT.bat"
           )
@@ -90,4 +94,3 @@ jobs:
         with:
           name: sea-of-fire-android
           path: artifacts/android
-

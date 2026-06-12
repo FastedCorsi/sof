@@ -42,7 +42,7 @@ jobs:
           VPS_USER: ${{ secrets.VPS_USER }}
           VPS_DEPLOY_PATH: ${{ secrets.VPS_DEPLOY_PATH }}
         run: |
-          ssh "$VPS_USER@$VPS_HOST" "mkdir -p '$VPS_DEPLOY_PATH'"
+          ssh "$VPS_USER@$VPS_HOST" "sudo mkdir -p '$VPS_DEPLOY_PATH' && sudo chown -R '$VPS_USER:$VPS_USER' '$VPS_DEPLOY_PATH'"
           rsync -az --delete -e ssh Backend/package.json Backend/package-lock.json Backend/dist Deploy "$VPS_USER@$VPS_HOST:$VPS_DEPLOY_PATH/"
 
       - name: Restart backend

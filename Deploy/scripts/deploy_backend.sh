@@ -18,7 +18,7 @@ PUBLIC_BACKEND_URL=${PUBLIC_BACKEND_URL:-}
 PUBLIC_WS_URL=${PUBLIC_WS_URL:-}
 EOF
 
-if command -v systemctl >/dev/null 2>&1; then
+if command -v systemctl >/dev/null 2>&1 && systemctl list-unit-files sea-of-fire-backend.service >/dev/null 2>&1; then
   sudo systemctl restart sea-of-fire-backend
 else
   pkill -f "sea-of-fire-backend" || true

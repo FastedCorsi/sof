@@ -1,0 +1,24 @@
+{
+  "FileVersion": 3,
+  "EngineAssociation": "5.4",
+  "Category": "Games",
+  "Description": "Sea of fire mobile-first pirate fantasy multiplayer client.",
+  "Modules": [
+    {
+      "Name": "SeaOfFire",
+      "Type": "Runtime",
+      "LoadingPhase": "Default"
+    }
+  ],
+  "Plugins": [
+    {
+      "Name": "EnhancedInput",
+      "Enabled": true
+    },
+    {
+      "Name": "UMG",
+      "Enabled": true
+    }
+  ]
+}
+

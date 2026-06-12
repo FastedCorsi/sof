@@ -3,6 +3,7 @@
 Thumbs.db
 .idea/
 .vscode/
+.vs/
 
 # Node
 node_modules/
@@ -32,4 +33,3 @@ release/
 *.aab
 *.exe
 *.zip
-

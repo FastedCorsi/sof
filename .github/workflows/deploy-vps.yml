@@ -34,6 +34,10 @@ jobs:
           mkdir -p ~/.ssh
           printf '%s\n' "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
+          if [ ! -s ~/.ssh/id_rsa ]; then
+            echo "::error::VPS_SSH_KEY secret is empty"
+            exit 1
+          fi
           printf 'Host *\n  StrictHostKeyChecking no\n  UserKnownHostsFile /dev/null\n' > ~/.ssh/config
 
       - name: Upload backend
@@ -42,6 +46,9 @@ jobs:
           VPS_USER: ${{ secrets.VPS_USER }}
           VPS_DEPLOY_PATH: ${{ secrets.VPS_DEPLOY_PATH }}
         run: |
+          VPS_HOST="${VPS_HOST:-51.38.35.62}"
+          VPS_USER="${VPS_USER:-ubuntu}"
+          VPS_DEPLOY_PATH="${VPS_DEPLOY_PATH:-/opt/sea-of-fire}"
           ssh "$VPS_USER@$VPS_HOST" "sudo mkdir -p '$VPS_DEPLOY_PATH' && sudo chown -R '$VPS_USER:$VPS_USER' '$VPS_DEPLOY_PATH'"
           rsync -az --delete -e ssh Backend/package.json Backend/package-lock.json Backend/dist Deploy "$VPS_USER@$VPS_HOST:$VPS_DEPLOY_PATH/"
 
@@ -53,4 +60,9 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           BACKEND_ENV: ${{ secrets.BACKEND_ENV }}
         run: |
+          VPS_HOST="${VPS_HOST:-51.38.35.62}"
+          VPS_USER="${VPS_USER:-ubuntu}"
+          VPS_DEPLOY_PATH="${VPS_DEPLOY_PATH:-/opt/sea-of-fire}"
+          DATABASE_URL="${DATABASE_URL:-postgresql://placeholder:placeholder@localhost:5432/sea_of_fire}"
+          BACKEND_ENV="${BACKEND_ENV:-production}"
           ssh "$VPS_USER@$VPS_HOST" "cd '$VPS_DEPLOY_PATH' && DATABASE_URL='$DATABASE_URL' BACKEND_ENV='$BACKEND_ENV' VPS_DEPLOY_PATH='$VPS_DEPLOY_PATH' bash Deploy/scripts/deploy_backend.sh"

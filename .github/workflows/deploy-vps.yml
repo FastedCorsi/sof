@@ -34,7 +34,7 @@ jobs:
           mkdir -p ~/.ssh
           printf '%s\n' "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts
+          printf 'Host *\n  StrictHostKeyChecking no\n  UserKnownHostsFile /dev/null\n' > ~/.ssh/config
 
       - name: Upload backend
         env:
@@ -43,7 +43,7 @@ jobs:
           VPS_DEPLOY_PATH: ${{ secrets.VPS_DEPLOY_PATH }}
         run: |
           ssh "$VPS_USER@$VPS_HOST" "mkdir -p '$VPS_DEPLOY_PATH'"
-          rsync -az --delete Backend/package.json Backend/package-lock.json Backend/dist Deploy "$VPS_USER@$VPS_HOST:$VPS_DEPLOY_PATH/"
+          rsync -az --delete -e ssh Backend/package.json Backend/package-lock.json Backend/dist Deploy "$VPS_USER@$VPS_HOST:$VPS_DEPLOY_PATH/"
 
       - name: Restart backend
         env:
@@ -54,4 +54,3 @@ jobs:
           BACKEND_ENV: ${{ secrets.BACKEND_ENV }}
         run: |
           ssh "$VPS_USER@$VPS_HOST" "cd '$VPS_DEPLOY_PATH' && DATABASE_URL='$DATABASE_URL' BACKEND_ENV='$BACKEND_ENV' VPS_DEPLOY_PATH='$VPS_DEPLOY_PATH' bash Deploy/scripts/deploy_backend.sh"
-

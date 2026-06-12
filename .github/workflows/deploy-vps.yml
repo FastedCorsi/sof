@@ -49,8 +49,10 @@ jobs:
           VPS_HOST="${VPS_HOST:-51.38.35.62}"
           VPS_USER="${VPS_USER:-ubuntu}"
           VPS_DEPLOY_PATH="${VPS_DEPLOY_PATH:-/opt/sea-of-fire}"
+          tar -czf /tmp/sea-of-fire-backend.tgz -C Backend package.json package-lock.json dist -C .. Deploy
           ssh "$VPS_USER@$VPS_HOST" "sudo mkdir -p '$VPS_DEPLOY_PATH' && sudo chown -R '$VPS_USER:$VPS_USER' '$VPS_DEPLOY_PATH'"
-          rsync -az --delete -e ssh Backend/package.json Backend/package-lock.json Backend/dist Deploy "$VPS_USER@$VPS_HOST:$VPS_DEPLOY_PATH/"
+          scp /tmp/sea-of-fire-backend.tgz "$VPS_USER@$VPS_HOST:$VPS_DEPLOY_PATH/sea-of-fire-backend.tgz"
+          ssh "$VPS_USER@$VPS_HOST" "cd '$VPS_DEPLOY_PATH' && tar -xzf sea-of-fire-backend.tgz && rm sea-of-fire-backend.tgz"
 
       - name: Restart backend
         env:
